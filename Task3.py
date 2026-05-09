@@ -47,3 +47,4 @@ for j, k in enumerate(range(5, 16)):
         acc = np.mean(predictions[mask] == digit)  # accuracy for this digit
         digit_accuracies[digit, j] = acc
         print(f"Digit {digit}: {acc*100:.2f}%")
+        
