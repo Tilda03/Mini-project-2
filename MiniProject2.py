@@ -26,9 +26,9 @@ for i in range(10):
     eigval_singval_i = np.abs(np.linalg.eigvals(Ai.T @ Ai))
     singval_i = np.sqrt(eigval_singval_i)
 
-    idx = np.argsort(singval_i)[::-1]
-    singval_i = singval_i[idx]
-    
+    # idx = np.argsort(singval_i)[::-1]
+    # singval_i = singval_i[idx]
+
     Sigma.append(np.diag(singval_i))
 
     # U
@@ -50,7 +50,7 @@ for i in range(10):
 digits = [Sigma[3], Sigma[8]]
 
 for r in range(2):
-    sv = np.diag(digits[r])  # extract the diagonal
+    sv = np.diag(digits[r])  # extracting the diagonal
     fig, ax = plt.subplots()
     ax.plot(sv)
     if r==0:
@@ -60,7 +60,7 @@ for r in range(2):
 
     plt.show()
 
-# Plottign singular images
+# Plotting singular images
 digits = [U[3], U[8]]
 
 for r in range(2):
@@ -75,28 +75,3 @@ for r in range(2):
             ax.set_title(f'Singular image nr. {c+1} for digit 8')
 
         plt.show()
-
-
-#sum = np.sum(index)
-
-
-
-#print(digits)
-
-#d = digits[:,56]
-
-#D = np.reshape(d, (28, 28)).T
-
-#d = TrainDigits[:,0]
-
-#l = TrainLabels[:,0]
-
-#D = np.reshape(d, (28, 28)).T
-
-#print(k)
-
-
-
-
-#plt.imshow(D, cmap ='gray')
-#plt.show()
