@@ -5,7 +5,7 @@ from MiniProject2 import U
 
 TestD = np.load('TestDigits.npy')
 TestL = np.load('TestLabels.npy').flatten()
-
+#
 # Computing U_k and U_k*U_k^T
 Uk = []
 Pk = []

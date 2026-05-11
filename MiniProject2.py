@@ -13,44 +13,42 @@ for  i in range(10):
     digits_i = TD[:, index]  # matching index with columns
     A.append(digits_i[:, : 400])
 
-
-# Computing the SVD
+# Computing SVD
 Sigma = []
 U = []
 VT = []
 
 for i in range(10):
     Ai = A[i]
+    ATA = Ai.T @ Ai
 
-    # Singular values
-    eigval_singval_i = np.abs(np.linalg.eigvals(Ai.T @ Ai))
-    singval_i = np.sqrt(eigval_singval_i)
+    eigvals, V = np.linalg.eigh(ATA)
+    idx = np.argsort(eigvals)[::-1]
+    eigvals = eigvals[idx]
+    V = V[:, idx]
+    eigvals = np.maximum(eigvals, 0) # remove negative values
+    
+    singular_values = np.sqrt(eigvals)
+    r = np.sum(singular_values > 1e-8)  # remove singular values close to zero
+    singular_values = singular_values[:r]
+    V = V[:, :r]
 
-    # idx = np.argsort(singval_i)[::-1]
-    # singval_i = singval_i[idx]
+    Ui = np.zeros((Ai.shape[0], r))
+    for j in range(r):
+        Ui[:, j] = (Ai @ V[:, j]) / singular_values[j]
 
-    Sigma.append(np.diag(singval_i))
+    # orthonormalization
+    Ui, _ = np.linalg.qr(Ui)
 
-    # U
-    eigval_U_i, eigvec_U_i = np.linalg.eigh(Ai @ Ai.T)
-    idx = np.argsort(eigval_U_i)[::-1]
-
-    eigvec_U_i = eigvec_U_i[:, idx]
-    U.append(eigvec_U_i)
-
-    # V^T
-    eigval_V_i, eigvec_V_i = np.linalg.eigh(Ai.T @ Ai)
-    idx = np.argsort(eigval_V_i)[::-1]
-
-    eigvec_V_i = eigvec_V_i[:, idx]
-    VT.append(eigvec_V_i.T)
-
-
+    U.append(Ui)
+    Sigma.append(singular_values)
+    VT.append(V.T)
+# 
 # Plotting singular values
 digits = [Sigma[3], Sigma[8]]
 
 for r in range(2):
-    sv = np.diag(digits[r])  # extracting the diagonal
+    sv = digits[r]
     fig, ax = plt.subplots()
     ax.plot(sv)
     if r==0:
